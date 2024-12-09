@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "mybucket-your-terraform-state-bucket "
+    bucket = "dk-bucket-ter "
     key    = "ecs/nodejs-microservice/terraform.tfstate"
     region = "us-east-1"
   }
