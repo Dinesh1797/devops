@@ -1,10 +1,11 @@
-# terraform {
-#   backend "s3" {
-#     bucket = "dk-bucket-ter "
-#     key    = "ecs/nodejs-microservice/terraform.tfstate"
-#     region = "us-east-1"
-#   }
-# }
+terraform {
+  backend "s3" {
+    bucket         = "dk-bucket-ter"
+    key            = "terraform.tfstate"
+    region         = "us-east-1"
+  }
+}
+
 
 provider "aws" {
   region = var.region
