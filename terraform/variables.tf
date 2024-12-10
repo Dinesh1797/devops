@@ -1,7 +1,7 @@
 variable "region" {
   description = "The AWS region to create resources in"
   type        = string
-  default     = "us-east-1"
+  default     = "ap-northeast-1"
 }
 
 variable "ecs_cluster_name" {

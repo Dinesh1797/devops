@@ -1,11 +1,10 @@
 terraform {
   backend "s3" {
-    bucket         = "dk-bucket-ter"
-    key            = "terraform.tfstate"
-    region         = "us-east-1"
+    bucket = "pavan-your-terraform-state-bucket"
+    key    = "ecs/devops-app/terraform.tfstate"
+    region = "ap-northeast-1"
   }
 }
-
 
 provider "aws" {
   region = var.region
@@ -16,53 +15,27 @@ resource "aws_ecs_cluster" "cluster" {
 }
 
 resource "aws_iam_role" "ecs_task_execution_role" {
-  name = "ecsTaskExecutionRole-${random_id.unique_id.hex}"
-
+  name = "ecsTaskExecutionRole"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
-        Action    = "sts:AssumeRole"
+        Effect = "Allow"
         Principal = {
           Service = "ecs-tasks.amazonaws.com"
         }
-        Effect    = "Allow"
-        Sid       = ""
-      },
+        Action = "sts:AssumeRole"
+      }
     ]
   })
+
   managed_policy_arns = [
     "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-   ]
+  ]
 }
-
-resource "random_id" "unique_id" {
-  byte_length = 8
-}
-
-# resource "aws_iam_role" "ecs_task_execution_role" {
-#   name = "ecsTaskExecutionRole"
-#   assume_role_policy = jsonencode({
-#     Version = "2012-10-17"
-#     Statement = [
-#       {
-#         Effect = "Allow"
-#         Principal = {
-#           Service = "ecs-tasks.amazonaws.com"
-#         }
-#         Action = "sts:AssumeRole"
-#       }
-#     ]
-#   })
-
-#   managed_policy_arns = [
-#     "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-#   ]
-# }
 
 resource "aws_ecs_task_definition" "task" {
   family                   = var.app_name
-  requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = "256"
   memory                   = "512"
@@ -71,7 +44,7 @@ resource "aws_ecs_task_definition" "task" {
   container_definitions = jsonencode([
     {
       name          = var.app_name
-      image         = "654654198598.dkr.ecr.us-east-1.amazonaws.com/nodejs-microservice:latest"
+      image         = "654654198598.dkr.ecr.ap-northeast-1.amazonaws.com/devops-app:latest"
       essential     = true
       portMappings  = [
         {
@@ -93,7 +66,7 @@ resource "aws_ecs_service" "service" {
   network_configuration {
     subnets         = var.subnet_ids
     assign_public_ip = true
-    security_groups = ["sg-0c6c2dbadc11941dd"]
+    security_groups = ["sg-01371a230db06318e"]
   }
 
   load_balancer {
@@ -104,22 +77,19 @@ resource "aws_ecs_service" "service" {
 }
 
 resource "aws_lb" "app_lb" {
-  name               = "${var.app_name}-lb-${random_id.unique_id.hex}"
+  name               = "${var.app_name}-lb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = ["sg-0c6c2dbadc11941dd"]
+  security_groups    = ["sg-01371a230db06318e"]
   subnets            = var.subnet_ids
 }
 
 resource "aws_lb_target_group" "app_target_group" {
-  name        = "${var.app_name}-tg-${random_id.unique_id.hex}"
+  name        = "${var.app_name}-tg"
   port        = 3000
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "ip"
-  health_check {
-     path = "/health"
-   }
 }
 
 resource "aws_lb_listener" "app_listener" {

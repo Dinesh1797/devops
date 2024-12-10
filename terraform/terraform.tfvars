@@ -1,5 +1,5 @@
-region      = "us-east-1"
+region      = "ap-northeast-1"
 ecs_cluster_name = "cluster-name"
-app_name         = "nodejs-microservice"
-vpc_id      = "vpc-01f03bc1e2f140083"
-subnet_ids  = ["subnet-07325a641ea2a3928", "subnet-0d3d588b4d7a5b50c"]
+app_name         = "app_name"
+vpc_id      = "vpc-0ac9af4fb8484cbe4"
+subnet_ids  = ["subnet-003149e8005499c28", "subnet-020750efe55573368"]

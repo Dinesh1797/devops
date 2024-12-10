@@ -1,15 +1,12 @@
 {
-  "name": "devops-task",
+  "name": "devops-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "Hello World Node.js app",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "express": "^4.21.2"
+    "express": "^4.17.1"
   }
 }
