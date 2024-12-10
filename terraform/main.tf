@@ -101,7 +101,7 @@ resource "aws_ecs_service" "service" {
 }
 
 resource "aws_lb" "app_lb" {
-  name               = "${var.app_name}-lb"
+  name               = "${var.app_name}-lb-${random_id.unique_id.hex}"
   internal           = false
   load_balancer_type = "application"
   security_groups    = ["sg-0c6c2dbadc11941dd"]
@@ -109,7 +109,7 @@ resource "aws_lb" "app_lb" {
 }
 
 resource "aws_lb_target_group" "app_target_group" {
-  name        = "${var.app_name}-tg"
+  name        = "${var.app_name}-tg-${random_id.unique_id.hex}"
   port        = 3000
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
