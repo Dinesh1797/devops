@@ -84,6 +84,7 @@ resource "aws_lb_target_group" "app_target_group" {
   target_type = "ip"
 }
 
+
 resource "aws_lb_listener" "app_listener" {
   load_balancer_arn = aws_lb.app_lb.arn
   port              = "80"
