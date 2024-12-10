@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "pavan-your-terraform-state-bucket"
+    bucket = "pav-terraform-state-bucket"
     key    = "ecs/devops-app/terraform.tfstate"
     region = "ap-northeast-1"
   }
