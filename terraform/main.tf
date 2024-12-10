@@ -37,6 +37,7 @@ resource "aws_iam_role" "ecs_task_execution_role" {
 
 resource "aws_ecs_task_definition" "task" {
   family                   = var.app_name
+  requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = "256"
   memory                   = "512"
@@ -78,7 +79,7 @@ resource "aws_ecs_service" "service" {
 }
 
 resource "aws_lb" "app_lb" {
-  name               = "${var.app_name}-lb-new"
+  name               = "${var.app_name}-lb"
   internal           = false
   load_balancer_type = "application"
   security_groups    = ["sg-0c6c2dbadc11941dd"]
@@ -86,7 +87,7 @@ resource "aws_lb" "app_lb" {
 }
 
 resource "aws_lb_target_group" "app_target_group" {
-  name        = "${var.app_name}-tg-new"
+  name        = "${var.app_name}-tg"
   port        = 3000
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
